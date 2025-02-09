@@ -8,20 +8,29 @@ pipeline {
         ansiColor('xterm')
     }
     stages {
+         stage('read the version') {
+            steps {
+                def packageJson = readJSON file: 'package.json'
+                def appVersion = packageJson.version
+                echo "application version: $appVersion"
+            }
+        }
         stage('Install Dependencies') {
             steps {
                 sh """
                     npm install
                     ls -ltr
+                    echo "app version: $appVersion"
                 """
             }
         }
+       
         
     }
     post {
         always {
             echo 'I will always run.'
-            deleteDir()
+            //deleteDir()
         }
         success {
             echo 'I will run only when pipeline is success'
