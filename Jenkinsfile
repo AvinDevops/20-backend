@@ -29,13 +29,21 @@ pipeline {
                 """
             }
         }
+        stage('Buil') {
+            steps {
+                sh """
+                    zip -r backend-${appVersion}.zip * -x Jenkinsfile -x backend-${appVersion}.zip
+                    ls -ltr
+                """
+            }
+        }
        
         
     }
     post {
         always {
             echo 'I will always run.'
-            //deleteDir()
+            deleteDir()
         }
         success {
             echo 'I will run only when pipeline is success'
