@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     def packageJson = readJSON file: 'package.json'
-                    def appVersion = packageJson.version
+                    appVersion = packageJson.version
                     echo "application version: $appVersion"
                 }            
             }
@@ -35,7 +35,7 @@ pipeline {
     post {
         always {
             echo 'I will always run.'
-            deleteDir()
+            //deleteDir()
         }
         success {
             echo 'I will run only when pipeline is success'
