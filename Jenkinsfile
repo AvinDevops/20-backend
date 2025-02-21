@@ -38,6 +38,20 @@ pipeline {
                 """
             }
         }
+
+        stage('Sonar Scan') {
+            environment {
+                scannerHome = tool 'Sonar 7.0' //referring agnet software
+            }
+            steps {
+                script {
+                    withSonarQubeEnv('Sonar 7.0') { //referring sonar
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
+
         stage('Nexus artifact upload') {
             steps {
                 nexusArtifactUploader(
@@ -67,10 +81,11 @@ pipeline {
                 }
                
             }
-}
+        }
+    }
        
         
-    }
+    
     post {
         always {
             echo 'I will always run.'
