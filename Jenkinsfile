@@ -7,6 +7,9 @@ pipeline {
         disableConcurrentBuilds()
         ansiColor('xterm')
     }
+    parameters {
+        booleanParam(name: 'deploy', defaultValue: false, description: 'Toggle this value')
+    }
     environment {
         def appVersion = '' //variable declaration
         nexusUrl = 'nexus.avinexpense.online:8081'
@@ -71,17 +74,22 @@ pipeline {
                 )
             }
         }
-        // stage ('Starting downstream job ') {
-        //     steps {
-        //         script {
-        //             def params = [
-        //                 string(name: 'appVersion', value: "${appVersion}")
-        //             ]
-        //              build job: 'backend-deploy', parameters: params, wait: false
-        //         }
+        stage ('Starting downstream job') {
+            when {
+                expression {
+                    params.deploy
+                }
+            }
+            steps {
+                script {
+                    def params = [
+                        string(name: 'appVersion', value: "${appVersion}")
+                    ]
+                     build job: 'backend-deploy', parameters: params, wait: false
+                }
                
-        //     }
-        // }
+            }
+        }
     }
        
         
